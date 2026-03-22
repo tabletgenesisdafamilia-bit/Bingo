@@ -3,73 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo Profissional - 1 a 75</title>
+    <title>Bingo 1-75 | 10 por linha</title>
     <style>
-        /* Bloqueia o "puxar para atualizar" no celular */
+        /* Impede o "puxar para atualizar" e define o visual */
         body {
             overscroll-behavior-y: contain; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
-            background-color: #f0f2f5;
+            padding: 20px;
+            background-color: #f4f7f6;
             margin: 0;
         }
 
         .painel-geral {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             background-color: #fff;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 100%;
+            max-width: 95%;
         }
 
-        h3 { color: #2c3e50; margin: 0 0 10px 0; text-align: center; font-size: 1.1rem; }
+        h3 { color: #2c3e50; margin: 0 0 15px 0; text-align: center; }
 
         .container-cartelas {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         table { border-collapse: collapse; background-color: #fff; }
 
         td {
             border: 1px solid #ddd;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             text-align: center;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
             cursor: pointer;
             user-select: none;
-            transition: all 0.1s;
+            transition: background 0.1s;
         }
 
-        /* Números que não estão nas suas fotos ficam mais claros */
-        .inexistente { color: #ccc; background-color: #fdfdfd; font-weight: normal; }
+        /* Números fora das suas cartelas ficam cinza claro */
+        .inexistente { color: #ccc; background-color: #fafafa; font-weight: normal; }
         
-        td:hover { background-color: #f8f9fa; }
+        td:hover { background-color: #f1f1f1; }
 
-        /* Estilo da marcação verde */
+        /* Estilo quando o número é clicado */
         .marcada {
-            background-color: #28a745 !important;
+            background-color: #27ae60 !important;
             color: white !important;
-            border-color: #1e7e34;
+            border-color: #1e8449;
         }
 
-        .controles { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .controles {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
 
         button {
-            padding: 12px 40px;
-            font-size: 16px;
+            padding: 15px 50px;
+            font-size: 18px;
             cursor: pointer;
-            background-color: #dc3545;
+            background-color: #e74c3c;
             color: white;
             border: none;
             border-radius: 8px;
@@ -77,14 +82,16 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        #status-tela { font-size: 10px; color: #7f8c8d; }
+        #status-tela { font-size: 11px; color: #95a5a6; }
     </style>
 </head>
 <body>
 
     <div class="painel-geral">
-        <h3>Painel de Conferência (1 - 75)</h3>
-        <table id="tabela-75"><tbody id="corpo-75"></tbody></table>
+        <h3>Painel Geral (1 - 75)</h3>
+        <table id="tabela-75">
+            <tbody id="corpo-75"></tbody>
+        </table>
     </div>
 
     <div class="container-cartelas">
@@ -114,30 +121,43 @@
     </div>
 
     <div class="controles">
-        <button id="btn-reset">RESETAR JOGO</button>
-        <div id="status-tela">Carregando proteção de tela...</div>
+        <button id="btn-reset">RESETAR BINGO</button>
+        <div id="status-tela">Mantendo tela ativa...</div>
     </div>
 
     <script>
-        // 1. Identificar números existentes para estilo
+        // 1. Mapear números das fotos
         const celulasCartelas = document.querySelectorAll('.cartela td');
         const listaExistentes = new Set(Array.from(celulasCartelas).map(td => parseInt(td.dataset.num)));
 
-        // 2. Gerar Tabela 1-75 (15 colunas para ficar simétrico com o Bingo 75)
+        // 2. Gerar Tabela 1-75 com 10 NÚMEROS POR LINHA
         const corpo75 = document.getElementById('corpo-75');
         let tr = document.createElement('tr');
+        
         for (let i = 1; i <= 75; i++) {
             const numStr = i.toString().padStart(2, '0');
             const td = document.createElement('td');
             td.textContent = numStr;
             td.dataset.num = numStr;
-            if (!listaExistentes.has(i)) td.classList.add('inexistente');
+            
+            if (!listaExistentes.has(i)) {
+                td.classList.add('inexistente');
+            }
+
             tr.appendChild(td);
-            // Quebra a linha a cada 15 números (padrão B-I-N-G-O)
-            if (i % 15 === 0) { corpo75.appendChild(tr); tr = document.createElement('tr'); }
+
+            // Quebra a linha a cada 10 números
+            if (i % 10 === 0) {
+                corpo75.appendChild(tr);
+                tr = document.createElement('tr');
+            }
+        }
+        // Adiciona a última linha (que terá os números 71 a 75)
+        if (tr.children.length > 0) {
+            corpo75.appendChild(tr);
         }
 
-        // 3. Sincronização
+        // 3. Lógica de Sincronização Total
         const todas = document.querySelectorAll('td');
         todas.forEach(c => {
             c.addEventListener('click', function() {
@@ -149,27 +169,31 @@
             });
         });
 
-        // 4. Reset
+        // 4. Reset com confirmação
         document.getElementById('btn-reset').addEventListener('click', () => {
-            if(confirm("Deseja limpar todas as marcações?")) {
+            if(confirm("Deseja realmente zerar todas as marcações?")) {
                 todas.forEach(c => c.classList.remove('marcada'));
             }
         });
 
         // 5. Proteções (Anti-Refresh e Wake Lock)
-        window.onbeforeunload = () => document.querySelector('.marcada') ? true : null;
+        window.onbeforeunload = () => {
+            if(document.querySelector('.marcada')) return "Jogo em andamento!";
+        };
 
         let wakeLock = null;
-        async function lock() {
+        async function lockScreen() {
             try {
                 if('wakeLock' in navigator) {
                     wakeLock = await navigator.wakeLock.request('screen');
-                    document.getElementById('status-tela').textContent = "☀️ Tela sempre ligada";
+                    document.getElementById('status-tela').textContent = "☀️ Tela Protegida (Sempre ligada)";
                 }
             } catch (e) {}
         }
-        lock();
-        document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') lock(); });
+        lockScreen();
+        document.addEventListener('visibilitychange', () => {
+            if(document.visibilityState === 'visible') lockScreen();
+        });
     </script>
 </body>
 </html>
