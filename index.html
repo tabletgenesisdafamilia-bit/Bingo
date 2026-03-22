@@ -3,84 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo Profissional - Protegido</title>
+    <title>Bingo Profissional - 1 a 75</title>
     <style>
-        /* IMPEDE O "ARRASTAR PARA BAIXO" NO CELULAR */
+        /* Bloqueia o "puxar para atualizar" no celular */
         body {
             overscroll-behavior-y: contain; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            background-color: #f4f7f6;
+            padding: 15px;
+            background-color: #f0f2f5;
             margin: 0;
         }
 
         .painel-geral {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background-color: #fff;
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            max-width: 95%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 100%;
         }
 
-        h3 { color: #2c3e50; margin: 0 0 15px 0; text-align: center; font-size: 1.2rem; }
+        h3 { color: #2c3e50; margin: 0 0 10px 0; text-align: center; font-size: 1.1rem; }
 
         .container-cartelas {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         table { border-collapse: collapse; background-color: #fff; }
 
         td {
             border: 1px solid #ddd;
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             text-align: center;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
             color: #333;
             cursor: pointer;
             user-select: none;
-            transition: all 0.15s ease;
+            transition: all 0.1s;
         }
 
-        .inexistente { color: #ccc; background-color: #fafafa; font-weight: normal; }
-        td:hover { background-color: #f1f1f1; }
+        /* Números que não estão nas suas fotos ficam mais claros */
+        .inexistente { color: #ccc; background-color: #fdfdfd; font-weight: normal; }
+        
+        td:hover { background-color: #f8f9fa; }
 
+        /* Estilo da marcação verde */
         .marcada {
-            background-color: #27ae60 !important;
+            background-color: #28a745 !important;
             color: white !important;
-            border-color: #1e8449;
+            border-color: #1e7e34;
         }
 
-        .controles { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .controles { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
         button {
-            padding: 15px 50px;
-            font-size: 18px;
+            padding: 12px 40px;
+            font-size: 16px;
             cursor: pointer;
-            background-color: #e74c3c;
+            background-color: #dc3545;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        #status-tela { font-size: 11px; color: #95a5a6; }
+        #status-tela { font-size: 10px; color: #7f8c8d; }
     </style>
 </head>
 <body>
 
     <div class="painel-geral">
-        <h3>Tabuleiro Geral (1 - 100)</h3>
-        <table id="tabela-100"><tbody id="corpo-100"></tbody></table>
+        <h3>Painel de Conferência (1 - 75)</h3>
+        <table id="tabela-75"><tbody id="corpo-75"></tbody></table>
     </div>
 
     <div class="container-cartelas">
@@ -110,66 +114,62 @@
     </div>
 
     <div class="controles">
-        <button id="btn-reset">Limpar Tudo</button>
-        <div id="status-tela">Iniciando sistema...</div>
+        <button id="btn-reset">RESETAR JOGO</button>
+        <div id="status-tela">Carregando proteção de tela...</div>
     </div>
 
     <script>
-        // Gerar Tabela 1-100
+        // 1. Identificar números existentes para estilo
         const celulasCartelas = document.querySelectorAll('.cartela td');
-        const listaNumerosExistentes = new Set(Array.from(celulasCartelas).map(td => parseInt(td.dataset.num)));
-        const corpo100 = document.getElementById('corpo-100');
+        const listaExistentes = new Set(Array.from(celulasCartelas).map(td => parseInt(td.dataset.num)));
+
+        // 2. Gerar Tabela 1-75 (15 colunas para ficar simétrico com o Bingo 75)
+        const corpo75 = document.getElementById('corpo-75');
         let tr = document.createElement('tr');
-        for (let i = 1; i <= 100; i++) {
-            const num = i.toString().padStart(2, '0');
+        for (let i = 1; i <= 75; i++) {
+            const numStr = i.toString().padStart(2, '0');
             const td = document.createElement('td');
-            td.textContent = num;
-            td.dataset.num = num;
-            if (!listaNumerosExistentes.has(i)) td.classList.add('inexistente');
+            td.textContent = numStr;
+            td.dataset.num = numStr;
+            if (!listaExistentes.has(i)) td.classList.add('inexistente');
             tr.appendChild(td);
-            if (i % 10 === 0) { corpo100.appendChild(tr); tr = document.createElement('tr'); }
+            // Quebra a linha a cada 15 números (padrão B-I-N-G-O)
+            if (i % 15 === 0) { corpo75.appendChild(tr); tr = document.createElement('tr'); }
         }
 
-        // Lógica de Sincronização
-        const todasAsCelulas = document.querySelectorAll('td');
-        todasAsCelulas.forEach(celula => {
-            celula.addEventListener('click', function() {
+        // 3. Sincronização
+        const todas = document.querySelectorAll('td');
+        todas.forEach(c => {
+            c.addEventListener('click', function() {
                 const n = this.dataset.num;
                 const marcar = !this.classList.contains('marcada');
-                document.querySelectorAll(`[data-num="${n}"]`).forEach(c => {
-                    marcar ? c.classList.add('marcada') : c.classList.remove('marcada');
+                document.querySelectorAll(`[data-num="${n}"]`).forEach(el => {
+                    marcar ? el.classList.add('marcada') : el.classList.remove('marcada');
                 });
             });
         });
 
-        // Reset com confirmação
+        // 4. Reset
         document.getElementById('btn-reset').addEventListener('click', () => {
-            if(confirm("Limpar todas as marcações?")) {
-                todasAsCelulas.forEach(c => c.classList.remove('marcada'));
+            if(confirm("Deseja limpar todas as marcações?")) {
+                todas.forEach(c => c.classList.remove('marcada'));
             }
         });
 
-        // --- PROTEÇÃO CONTRA ATUALIZAÇÃO ACIDENTAL ---
-        window.addEventListener('beforeunload', (event) => {
-            // Verifica se existe alguma célula marcada antes de perguntar
-            const temMarcacao = document.querySelector('.marcada');
-            if (temMarcacao) {
-                event.preventDefault();
-                event.returnValue = ''; // Exibe o aviso padrão do navegador
-            }
-        });
+        // 5. Proteções (Anti-Refresh e Wake Lock)
+        window.onbeforeunload = () => document.querySelector('.marcada') ? true : null;
 
-        // Wake Lock
         let wakeLock = null;
-        async function requestWakeLock() {
-            if ('wakeLock' in navigator) {
-                try {
+        async function lock() {
+            try {
+                if('wakeLock' in navigator) {
                     wakeLock = await navigator.wakeLock.request('screen');
-                    document.getElementById('status-tela').textContent = "☀️ Tela Protegida";
-                } catch (err) {}
-            }
+                    document.getElementById('status-tela').textContent = "☀️ Tela sempre ligada";
+                }
+            } catch (e) {}
         }
-        requestWakeLock();
+        lock();
+        document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') lock(); });
     </script>
 </body>
 </html>
