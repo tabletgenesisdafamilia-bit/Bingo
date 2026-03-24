@@ -141,3 +141,8 @@ td {
 .rodape-botoes .btn br {
     display: block;
 }
+
+.sorteado {
+    background: #fff3b0 !important; /* amarelo claro */
+    color: #333 !important;
+}
