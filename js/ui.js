@@ -54,18 +54,25 @@ function renderizarCartelas() {
         const table = document.createElement("table");
         let html = "";
 
-        nums.forEach((n, i) => {
+ nums.forEach((n, i) => {
 
-            if (i % 5 === 0) html += "<tr>";
+    if (i % 5 === 0) html += "<tr>";
 
-            const css = marcados.has(n) ? "marcada" : "";
+    const css = marcados.has(n) ? "marcada" : "";
 
-            html += `<td data-num="${n}" class="${css}">${n}</td>`;
+    html += `<td data-num="${n}" class="${css}">${n}</td>`;
 
-            if (i % 5 === 4) html += "</tr>";
+    if (i % 5 === 4) html += "</tr>";
 
-        });
+    const td = document.querySelector(`#tabela-75 [data-num="${n}"]`);
+    if (td) {
+        td.classList.remove("inexistente");
+        if (marcados.has(n)) {
+    td.classList.add("sorteado"); // 👈 amarelo no painel
+}
+    }
 
+});
         table.innerHTML = html;
 
         wrapper.appendChild(btn);
