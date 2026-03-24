@@ -61,3 +61,56 @@ td {
     background: rgba(0,0,0,0.6);
     z-index: 100;
 }
+.botoes-acoes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 📁 Arquivo */
+.btn-arquivo {
+    background: #3498db;
+}
+
+.btn-arquivo:hover {
+    background: #2980b9;
+}
+
+/* 📷 Câmera */
+.btn-camera {
+    background: #2ecc71;
+}
+
+.btn-camera:hover {
+    background: #27ae60;
+}
+
+/* 🗑️ Reset */
+.btn-reset {
+    background: #e74c3c;
+}
+
+.btn-reset:hover {
+    background: #c0392b;
+}
+
+/* estilo do label como botão */
+.btn-arquivo input {
+    display: none;
+}
