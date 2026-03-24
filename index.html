@@ -350,20 +350,49 @@ function abrirModal(nums) {
     grid.innerHTML = "";
 
     const container = document.createElement("div");
+
     container.style.display = "grid";
     container.style.gridTemplateColumns = "repeat(5, 40px)";
     container.style.gap = "6px";
+    container.style.justifyContent = "center";
 
     for (let i = 0; i < 25; i++) {
 
         let v = nums[i] || "";
+
+        // Centro da cartela
         if (i === 12 && !v) v = "XX";
 
         const input = document.createElement("input");
+
+        // 🔢 Forçar teclado numérico no mobile
+        input.type = "tel";
+        input.inputMode = "numeric";
+        input.pattern = "[0-9]*";
+
         input.value = v;
+        input.maxLength = 2;
+
         input.style.width = "40px";
         input.style.height = "40px";
         input.style.textAlign = "center";
+        input.style.fontSize = "16px";
+        input.style.border = "1px solid #ccc";
+        input.style.borderRadius = "4px";
+
+        // Seleciona automaticamente o conteúdo ao tocar
+        input.onclick = () => input.select();
+
+        // Avanço automático para próximo campo
+        input.addEventListener("input", (e) => {
+            let val = e.target.value.replace(/\D/g, ""); // remove não números
+            e.target.value = val;
+
+            if (val.length === 2) {
+                const next = container.querySelectorAll("input")[i + 1];
+                if (next) next.focus();
+            }
+        });
 
         container.appendChild(input);
     }
