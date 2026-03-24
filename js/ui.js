@@ -28,11 +28,12 @@ function renderizarCartelas() {
     const container = document.getElementById("container-cartelas");
     container.innerHTML = "";
 
+    // 🔄 RESET DO PAINEL 1–75
     document.querySelectorAll("#tabela-75 td").forEach(td => {
-    td.classList.add("inexistente");
-    td.classList.remove("marcada");
-    td.classList.remove("sorteado"); // 👈 novo
-});
+        td.classList.add("inexistente");
+        td.classList.remove("marcada");
+        td.classList.remove("sorteado"); // 👈 NOVO
+    });
 
     cartelas.forEach((nums, index) => {
 
@@ -54,34 +55,39 @@ function renderizarCartelas() {
         const table = document.createElement("table");
         let html = "";
 
- nums.forEach((n, i) => {
+        nums.forEach((n, i) => {
 
-    if (i % 5 === 0) html += "<tr>";
+            if (i % 5 === 0) html += "<tr>";
 
-    const css = marcados.has(n) ? "marcada" : "";
+            const css = marcados.has(n) ? "marcada" : "";
 
-    html += `<td data-num="${n}" class="${css}">${n}</td>`;
+            html += `<td data-num="${n}" class="${css}">${n}</td>`;
 
-    if (i % 5 === 4) html += "</tr>";
+            if (i % 5 === 4) html += "</tr>";
 
-    const td = document.querySelector(`#tabela-75 [data-num="${n}"]`);
-    if (td) {
-        td.classList.remove("inexistente");
-        if (marcados.has(n)) {
-    td.classList.add("sorteado"); // 👈 amarelo no painel
-}
-    }
+            // 🎯 ATUALIZA PAINEL 1–75
+            const td = document.querySelector(`#tabela-75 [data-num="${n}"]`);
+            if (td) {
+                td.classList.remove("inexistente");
 
-});
+                if (marcados.has(n)) {
+                    td.classList.add("sorteado"); // 👈 AMARELO
+                }
+            }
+
+        });
+
         table.innerHTML = html;
 
         wrapper.appendChild(btn);
         wrapper.appendChild(table);
         container.appendChild(wrapper);
 
+        // 🎉 Bingo automático
         if (verificarBingo(nums)) {
             wrapper.style.border = "3px solid gold";
         }
+
     });
 
     vincular();
@@ -102,7 +108,7 @@ function vincular() {
         };
     });
 
-    // 🎯 Clique no TABULEIRO 1–75 (amarelo)
+    // 🎯 Clique no PAINEL 1–75 (amarelo)
     document.querySelectorAll("#tabela-75 td").forEach(td => {
         td.onclick = () => {
             const n = td.dataset.num;
