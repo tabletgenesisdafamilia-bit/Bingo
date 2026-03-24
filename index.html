@@ -384,15 +384,32 @@ function abrirModal(nums) {
         input.onclick = () => input.select();
 
         // Avanço automático para próximo campo
-        input.addEventListener("input", (e) => {
-            let val = e.target.value.replace(/\D/g, ""); // remove não números
-            e.target.value = val;
+        input.addEventListener("focus", (e) => {
+    // 🔥 seleciona automaticamente o conteúdo ao focar
+    setTimeout(() => {
+        e.target.select();
+    }, 0);
+});
 
-            if (val.length === 2) {
-                const next = container.querySelectorAll("input")[i + 1];
-                if (next) next.focus();
-            }
-        });
+input.addEventListener("input", (e) => {
+    let val = e.target.value.replace(/\D/g, "");
+    e.target.value = val;
+
+    if (val.length === 2) {
+
+        const inputs = container.querySelectorAll("input");
+        const next = inputs[i + 1];
+
+        if (next) {
+            next.focus();
+
+            // 🔥 garante seleção no próximo campo
+            setTimeout(() => {
+                next.select();
+            }, 0);
+        }
+    }
+});
 
         container.appendChild(input);
     }
