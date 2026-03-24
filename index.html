@@ -1,59 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bingo Pro</title>
-
-<link rel="stylesheet" href="css/style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3498db">
+    <title>Bingo Pro</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
-
 <body>
+    <main>
+        <section aria-label="Draw Panel">
+            <table id="tabela-75" aria-label="Numbers drawn from 1 to 75">
+                <tbody id="corpo-75"></tbody>
+            </table>
+        </section>
 
-<table id="tabela-75"><tbody id="corpo-75"></tbody></table>
+        <div id="status-tela" role="status" aria-live="polite"></div>
+        
+        <section aria-label="Bingo Cards">
+            <div class="container-cartelas" id="container-cartelas"></div>
+        </section>
+        
+        <footer class="rodape-botoes" aria-label="Action buttons">
+            <label class="btn btn-arquivo" title="Upload image">
+                📁<br>Arquivo
+                <input type="file" id="input-file" accept="image/*" aria-label="Upload bingo card image">
+            </label>
+            
+            <button class="btn btn-camera" id="btn-camera" title="Open camera">
+                📷<br>Abrir<br>Câmera
+            </button>
+            
+            <button class="btn btn-reset" id="btn-reset" title="Clear all marks">
+                🗑️<br>Limpar<br>Tudo
+            </button>
+        </footer>
+    </main>
 
-<div id="status-tela"></div>
+    <!-- Overlay for modals -->
+    <div class="overlay" id="overlay" role="presentation"></div>
 
-<div class="container-cartelas" id="container-cartelas"></div>
+    <!-- OCR Modal -->
+    <dialog id="modal-ocr" role="dialog" aria-labelledby="modal-ocr-title">
+        <h2 id="modal-ocr-title">Verify Card Numbers</h2>
+        <div id="grid"></div>
+        <div class="modal-actions">
+            <button id="btn-save-card">Salvar</button>
+            <button id="btn-cancel-card">Cancelar</button>
+        </div>
+    </dialog>
 
-<div class="rodape-botoes">
+    <!-- Camera Modal -->
+    <dialog id="camera-modal" role="dialog" aria-labelledby="camera-modal-title">
+        <h2 id="camera-modal-title">Capture Image</h2>
+        <video id="video" autoplay playsinline aria-label="Camera feed"></video>
+        <div class="modal-actions">
+            <button id="btn-capture">📸 Capturar</button>
+            <button id="btn-close-camera">❌ Fechar</button>
+        </div>
+    </dialog>
 
-    <label class="btn btn-arquivo">
-        📁<br>Arquivo
-        <input type="file" id="input-file" accept="image/*" hidden>
-    </label>
-
-    <button class="btn btn-camera" onclick="abrirCamera()">
-        📷<br>Abrir<br>Câmera
-    </button>
-
-    <button class="btn btn-reset" onclick="resetarMarcacoes()">
-        🗑️<br>Limpar<br>Tudo
-    </button>
-
-</div>
-
-<div class="overlay" id="overlay"></div>
-
-<div id="modal-ocr">
-    <div id="grid"></div>
-    <button onclick="salvarNovaCartela()">Salvar</button>
-</div>
-
-<div id="camera-modal">
-    <video id="video" autoplay playsinline></video>
-    <button onclick="capturar()">📸 Capturar</button>
-    <button onclick="fecharCamera()">❌ Fechar</button>
-</div>
-
-<script src="js/storage.js"></script>
-<script src="js/bingo.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/ocr.js"></script>
-<script src="js/camera.js"></script>
-<script src="js/main.js"></script>
-
+    <!-- Scripts (using modules) -->
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
