@@ -19,9 +19,22 @@
 
 <div class="container-cartelas" id="container-cartelas"></div>
 
-<input type="file" id="input-file" accept="image/*">
-<button onclick="abrirCamera()">📷 Abrir Câmera</button>
-<button onclick="resetarMarcacoes()">Limpar</button>
+<div class="botoes-acoes">
+
+    <label class="btn btn-arquivo">
+        📁 Escolher Arquivo
+        <input type="file" id="input-file" accept="image/*" hidden>
+    </label>
+
+    <button class="btn btn-camera" onclick="abrirCamera()">
+        📷 Abrir Câmera
+    </button>
+
+    <button class="btn btn-reset" onclick="resetarMarcacoes()">
+        🗑️ Limpar Tudo
+    </button>
+
+</div>
 
 <div class="overlay" id="overlay"></div>
 
