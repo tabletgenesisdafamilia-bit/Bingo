@@ -29,9 +29,10 @@ function renderizarCartelas() {
     container.innerHTML = "";
 
     document.querySelectorAll("#tabela-75 td").forEach(td => {
-        td.classList.add("inexistente");
-        td.classList.remove("marcada");
-    });
+    td.classList.add("inexistente");
+    td.classList.remove("marcada");
+    td.classList.remove("sorteado"); // 👈 novo
+});
 
     cartelas.forEach((nums, index) => {
 
@@ -80,12 +81,30 @@ function renderizarCartelas() {
 }
 
 function vincular() {
-    document.querySelectorAll("td[data-num]").forEach(td => {
+
+    // 🎯 Clique nas CARTELAS (verde)
+    document.querySelectorAll(".container-cartelas td[data-num]").forEach(td => {
         td.onclick = () => {
             const n = td.dataset.num;
 
             if (marcados.has(n)) marcados.delete(n);
             else marcados.add(n);
+
+            salvar();
+            renderizarCartelas();
+        };
+    });
+
+    // 🎯 Clique no TABULEIRO 1–75 (amarelo)
+    document.querySelectorAll("#tabela-75 td").forEach(td => {
+        td.onclick = () => {
+            const n = td.dataset.num;
+
+            if (marcados.has(n)) {
+                marcados.delete(n);
+            } else {
+                marcados.add(n);
+            }
 
             salvar();
             renderizarCartelas();
